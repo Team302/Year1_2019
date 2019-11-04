@@ -37,7 +37,9 @@ TeleopDrive::TeleopDrive
 
     // Create a Tank Drive object
 
-    // Create a Forza Drive object
+    // Create a Arcade Drive object
+
+    // Create a GTA Drive object
 
     // Set a default drive mode
 }
