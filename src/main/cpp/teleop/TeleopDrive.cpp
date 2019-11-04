@@ -30,26 +30,14 @@ TeleopDrive::TeleopDrive
 (
     shared_ptr<Chassis>     chassis,
     shared_ptr<DragonXBox>  xbox
-)
+) : m_chassis( chassis ),
+    m_xbox( xbox )
 {
-    // store these objects in private variables
-    // Create an Arcade Drive object
-
-    // Create a Tank Drive object
-
-    // Create a Arcade Drive object
-
-    // Create a GTA Drive object
-
-    // Set a default drive mode
 }
 
 void TeleopDrive::Drive()
 {
-    // If the A button is pressed, change the default drive mode to Arcade
-    // else if the B button is pressed, change the default drive mode to Tank
-    // else if the X button is pressed, change the default drive mode to Forza
-
-    // Run default drive mode
+    CalculateLeftRightPercents();
+    m_chassis->Drive( m_leftPower, m_rightPower );
 }
 
