@@ -55,11 +55,16 @@ class TeleopDrive
         
     protected:
         virtual void CalculateLeftRightPercents() = 0;
+        void SetLeftPercent( double percent );
+        void SetRightPercent( double percent );
+    
         std::shared_ptr<DragonXBox> GetXbox() const;
         std::shared_ptr<Chassis> GetChassis const;
 
     private:
         std::shared_ptr<chassis>     m_chassis;
         std::shared_ptr<DragonXBox>  m_xbox;
+        double                       m_leftPercent;
+        double                       m_rightPercent;
 
 };
