@@ -31,7 +31,9 @@ TeleopDrive::TeleopDrive
     shared_ptr<Chassis>     chassis,
     shared_ptr<DragonXBox>  xbox
 ) : m_chassis( chassis ),
-    m_xbox( xbox )
+    m_xbox( xbox ),
+    m_leftPercent( 0.0 ),
+    m_rightPercent( 0.0 )
 {
 }
 
@@ -39,5 +41,15 @@ void TeleopDrive::Drive()
 {
     CalculateLeftRightPercents();
     m_chassis->Drive( m_leftPower, m_rightPower );
+}
+
+void TeleopDrive::SetLeftPercent( double percent )
+{
+    m_leftPercent = percent;
+}
+
+void TeleopDrive::SetRightPercent( double percent )
+{
+    m_rightPercent = percent;
 }
 
