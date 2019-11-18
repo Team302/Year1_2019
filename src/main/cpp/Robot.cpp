@@ -44,7 +44,13 @@ void Robot::RobotInit()
     
     // Create a DragonXBox Controller object in port 0
 
-    // Create a TeleopDrive Object passing the chasis and controller objects
+    // Create each TeleopDrive Object passing the chasis and controller objects
+    // ArcadeDrive
+    // GTADrive
+    // TankDrive
+    // Set the current drive mode to ArcadeDrive then test
+    // After ArcadeDrive works, switch current drive mode to GTADrive and test
+    // After GTADrive works, switch to TankDrive and test
 
 }
 
@@ -89,7 +95,7 @@ void Robot::AutonomousPeriodic()
 ///-----------------------------------------------------------------------
 void Robot::TeleopInit() 
 {
-    // Call TelopDrive's init method
+    // Call the current drive modes's Drive Method
 }
 
 
@@ -100,7 +106,11 @@ void Robot::TeleopInit()
 ///-----------------------------------------------------------------------
 void Robot::TeleopPeriodic() 
 {
-    // Call TelopDrive's periodic method
+    // Call the current drive modes's Drive Method
+
+    // After all of the drive modes work, program a button to switch to each 
+    // drive mode (A = Arcade, X = GTADrive and B = TankDrive).  Note if no 
+    // button is pressed it doesn't switch modes. 
 }
 
 
