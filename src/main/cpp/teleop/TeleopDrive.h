@@ -43,7 +43,7 @@ class TeleopDrive
             std::shared_ptr<DragonXBox>  xbox
         );
         TeleopDrive() = delete;
-        ~TeleopDrive();
+        ~TeleopDrive() = default;
         
  
         //-----------------------------------------------------------------------------------------
@@ -58,11 +58,11 @@ class TeleopDrive
         void SetLeftPercent( double percent );
         void SetRightPercent( double percent );
     
-        std::shared_ptr<DragonXBox> GetXbox() const;
-        std::shared_ptr<Chassis> GetChassis const;
+        std::shared_ptr<DragonXBox> GetXBox() const;
+        std::shared_ptr<Chassis> GetChassis() const;
 
     private:
-        std::shared_ptr<chassis>     m_chassis;
+        std::shared_ptr<Chassis>     m_chassis;
         std::shared_ptr<DragonXBox>  m_xbox;
         double                       m_leftPercent;
         double                       m_rightPercent;

@@ -20,28 +20,34 @@
 // FRC includes
 
 // Team 302 Includes
-#include <teleop/TankDrive.h>
+#include <teleop/ArcadeDrive.h>
 #include <controllers/DragonXBox.h>
 #include <subsys/Chassis.h>
 
 using namespace std;
 
-TankDrive::TankDrive
+ArcadeDrive::ArcadeDrive
 (
     shared_ptr<Chassis>     chassis,
     shared_ptr<DragonXBox>  xbox
-) : TeleopDrive( chassis, xbox )
+) : ThrottleSteerDrive( chassis, xbox )
 {
     xbox->SetAxisProfile( IDragonGamePad::AXIS_IDENTIFIER::LEFT_JOYSTICK_Y, IDragonGamePad::AXIS_PROFILE::CUBED );
-    xbox->SetAxisProfile( IDragonGamePad::AXIS_IDENTIFIER::RIGHT_JOYSTICK_Y, IDragonGamePad::AXIS_PROFILE::CUBED );
+    xbox->SetAxisProfile( IDragonGamePad::AXIS_IDENTIFIER::RIGHT_JOYSTICK_X, IDragonGamePad::AXIS_PROFILE::CUBED );
 }
 
-void TankDrive::CalculateLeftRightPercents()
+//=======================================================================
+double ArcadeDrive::GetThrottle()
 {
     auto xbox = GetXBox();
-    if ( xbox != nullptr )
-    {
-        SetLeftPercent( xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::LEFT_JOYSTICK_Y ) );
-        SetRightPercent( xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::RIGHT_JOYSTICK_Y ) );
-    }
+    return ( ( xbox != nullptr ) ? xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::LEFT_JOYSTICK_Y) : 0.0 );
 }
+
+//=======================================================================
+double ArcadeDrive::GetSteer()
+{
+    auto xbox = GetXBox();
+    return ( ( xbox != nullptr ) ? xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::RIGHT_JOYSTICK_X) : 0.0 );
+}
+
+

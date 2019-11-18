@@ -20,28 +20,45 @@
 // FRC includes
 
 // Team 302 Includes
-#include <teleop/TankDrive.h>
+#include <teleop/GTADrive.h>
 #include <controllers/DragonXBox.h>
 #include <subsys/Chassis.h>
 
 using namespace std;
 
-TankDrive::TankDrive
+GTADrive::GTADrive
 (
     shared_ptr<Chassis>     chassis,
     shared_ptr<DragonXBox>  xbox
-) : TeleopDrive( chassis, xbox )
+) : ThrottleSteerDrive( chassis, xbox )
 {
-    xbox->SetAxisProfile( IDragonGamePad::AXIS_IDENTIFIER::LEFT_JOYSTICK_Y, IDragonGamePad::AXIS_PROFILE::CUBED );
-    xbox->SetAxisProfile( IDragonGamePad::AXIS_IDENTIFIER::RIGHT_JOYSTICK_Y, IDragonGamePad::AXIS_PROFILE::CUBED );
-}
-
-void TankDrive::CalculateLeftRightPercents()
-{
-    auto xbox = GetXBox();
     if ( xbox != nullptr )
     {
-        SetLeftPercent( xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::LEFT_JOYSTICK_Y ) );
-        SetRightPercent( xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::RIGHT_JOYSTICK_Y ) );
+        xbox->SetAxisProfile( IDragonGamePad::AXIS_IDENTIFIER::LEFT_TRIGGER, IDragonGamePad::AXIS_PROFILE::CUBED );
+        xbox->SetAxisProfile( IDragonGamePad::AXIS_IDENTIFIER::RIGHT_TRIGGER, IDragonGamePad::AXIS_PROFILE::CUBED );
+        xbox->SetAxisProfile( IDragonGamePad::AXIS_IDENTIFIER::LEFT_JOYSTICK_X, IDragonGamePad::AXIS_PROFILE::CUBED );
     }
 }
+
+//=======================================================================
+double GTADrive::GetThrottle()
+{
+    auto xbox = GetXBox();
+    double leftTrigger = 0.0;
+    double rightTrigger = 0.0;
+    if ( xbox != nullptr )
+    {
+        leftTrigger = xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::LEFT_TRIGGER );
+        rightTrigger = xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::RIGHT_TRIGGER );
+    }
+    return ( rightTrigger - leftTrigger );
+}
+
+//=======================================================================
+double GTADrive::GetSteer()
+{
+    auto xbox = GetXBox();
+    return ( ( xbox != nullptr ) ? xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::LEFT_JOYSTICK_X) : 0.0 );
+}
+
+

@@ -16,32 +16,52 @@
 
 // C++ Includes
 #include <memory>
+#include <cmath>
 
 // FRC includes
 
 // Team 302 Includes
-#include <teleop/TankDrive.h>
+#include <teleop/ThrottleSteerDrive.h>
 #include <controllers/DragonXBox.h>
 #include <subsys/Chassis.h>
 
 using namespace std;
 
-TankDrive::TankDrive
+ThrottleSteerDrive::ThrottleSteerDrive
 (
     shared_ptr<Chassis>     chassis,
     shared_ptr<DragonXBox>  xbox
 ) : TeleopDrive( chassis, xbox )
 {
-    xbox->SetAxisProfile( IDragonGamePad::AXIS_IDENTIFIER::LEFT_JOYSTICK_Y, IDragonGamePad::AXIS_PROFILE::CUBED );
-    xbox->SetAxisProfile( IDragonGamePad::AXIS_IDENTIFIER::RIGHT_JOYSTICK_Y, IDragonGamePad::AXIS_PROFILE::CUBED );
 }
 
-void TankDrive::CalculateLeftRightPercents()
+void ThrottleSteerDrive::CalculateLeftRightPercents( )
 {
-    auto xbox = GetXBox();
-    if ( xbox != nullptr )
+    // Get throttle and steer values from the subclasses
+    auto throttle = GetThrottle();
+    auto steer = GetSteer();
+
+    // convert throttle  / steer values to left / right values
+    auto left = throttle + steer;
+    auto right = throttle - steer;
+
+    // make sure the values are within -1.0 to 1.0
+    auto maxValue = abs( left );
+    if ( abs(right) > maxValue )
     {
-        SetLeftPercent( xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::LEFT_JOYSTICK_Y ) );
-        SetRightPercent( xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::RIGHT_JOYSTICK_Y ) );
+        maxValue = abs( right );
     }
+    if ( maxValue > 1.0 )
+    {
+        left /= maxValue;
+        right /= maxValue;
+    }
+
+    // Set the percentages
+    SetLeftPercent( left );
+    SetRightPercent( right );
+
+
 }
+
+

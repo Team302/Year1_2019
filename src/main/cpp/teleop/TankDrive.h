@@ -20,6 +20,7 @@
 #include <memory>
 
 // Team 302 include
+#include <teleop/TeleopDrive.h>
 
 // CTRE includes 
 
@@ -31,7 +32,7 @@
  * File Description:  This class calculates the drive percents for a tank drive
  *
  *========================================================================================================*/
-class TankDrive 
+class TankDrive : public TeleopDrive
 {
     public:
     
@@ -41,7 +42,7 @@ class TankDrive
             std::shared_ptr<DragonXBox>  xbox
         );
         TankDrive() = delete;
-        ~TankDrive();
+        ~TankDrive() = default;
                
     protected:
         void CalculateLeftRightPercents() override;

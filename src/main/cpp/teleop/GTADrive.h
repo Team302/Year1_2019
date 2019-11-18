@@ -14,34 +14,41 @@
 /// OR OTHER DEALINGS IN THE SOFTWARE.
 ///====================================================================================================================================================
 
-// C++ Includes
+#pragma once 
+
+// Standard C++ includes
 #include <memory>
 
-// FRC includes
-
-// Team 302 Includes
-#include <teleop/TankDrive.h>
-#include <controllers/DragonXBox.h>
+// Team 302 include
+#include <teleop/ThrottleSteerDrive.h>
 #include <subsys/Chassis.h>
+#include <controllers/DragonXBox.h>
 
-using namespace std;
+// CTRE includes 
 
-TankDrive::TankDrive
-(
-    shared_ptr<Chassis>     chassis,
-    shared_ptr<DragonXBox>  xbox
-) : TeleopDrive( chassis, xbox )
+
+/*========================================================================================================
+ * GTADrive.h
+ *========================================================================================================
+ *
+ * File Description:  This class calculates the drive percents for a tank drive
+ *
+ *========================================================================================================*/
+class GTADrive : public ThrottleSteerDrive
 {
-    xbox->SetAxisProfile( IDragonGamePad::AXIS_IDENTIFIER::LEFT_JOYSTICK_Y, IDragonGamePad::AXIS_PROFILE::CUBED );
-    xbox->SetAxisProfile( IDragonGamePad::AXIS_IDENTIFIER::RIGHT_JOYSTICK_Y, IDragonGamePad::AXIS_PROFILE::CUBED );
-}
+    public:
+    
+        GTADrive
+        (
+            std::shared_ptr<Chassis>     chassis,
+            std::shared_ptr<DragonXBox>  xbox
+        );
+        GTADrive() = delete;
+        ~GTADrive();
+               
+    protected:
+        double GetSteer() override;
+        double GetThrottle() override;
+    private:
 
-void TankDrive::CalculateLeftRightPercents()
-{
-    auto xbox = GetXBox();
-    if ( xbox != nullptr )
-    {
-        SetLeftPercent( xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::LEFT_JOYSTICK_Y ) );
-        SetRightPercent( xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::RIGHT_JOYSTICK_Y ) );
-    }
-}
+};
