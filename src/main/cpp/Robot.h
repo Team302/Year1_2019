@@ -29,6 +29,14 @@
 
 #include <frc/TimedRobot.h>
 
+#include <teleop/ShooterControl.h>
+#include <controllers/DragonXBox.h>
+#include <subsys/Shooter.h>
+#include <teleop/ArcadeDrive.h>
+#include <teleop/TankDrive.h>
+#include <teleop/GTADrive.h>
+#include <subsys/Chassis.h>
+
 class Robot : public frc::TimedRobot 
 {
   public:
@@ -42,4 +50,12 @@ class Robot : public frc::TimedRobot
       void TestPeriodic() override;
 
   private:
+       std::shared_ptr<Chassis>       m_chassis;
+       std::shared_ptr<Shooter>       m_shooter;
+       std::shared_ptr<DragonXBox>    m_driverXbox;
+       std::shared_ptr<DragonXBox>    m_copilotXbox;
+       std::shared_ptr<ShooterControl> m_shooterControl;
+       std::shared_ptr<ArcadeDrive>    m_arcade;
+       std::shared_ptr<TankDrive>      m_tank;
+       std::shared_ptr<GTADrive>       m_gta;
 };

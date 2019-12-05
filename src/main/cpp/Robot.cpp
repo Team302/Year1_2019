@@ -25,11 +25,21 @@
 ///========================================================================================================
 
 // C++ Includes
+#include <memory>
 
 // FRC includes
 
 // Team 302 Includes
 #include <Robot.h>
+#include <teleop/ShooterControl.h>
+#include <controllers/DragonXBox.h>
+#include <subsys/Shooter.h>
+#include <teleop/ArcadeDrive.h>
+#include <teleop/TankDrive.h>
+#include <teleop/GTADrive.h>
+#include <subsys/Chassis.h>
+
+using namespace std;
 
 ///-----------------------------------------------------------------------
 /// Method:      RobotInit
@@ -41,10 +51,19 @@ void Robot::RobotInit()
     // Each of the objects created should be stored in a class attribute
     
     // Create a Chassis object
+    m_chassis = make_shared<Chassis>( );
+    m_shooter = make_shared<Shooter>();
     
     // Create a DragonXBox Controller object in port 0
+    m_driverXbox = make_shared<DragonXBox>(0);
+    m_copilotXbox = make_shared<DragonXBox>(1);
 
     // Create a TeleopDrive Object passing the chasis and controller objects
+    m_arcade = make_unique<ArcadeDrive>( m_chassis,  m_driverXbox );
+    m_tank = make_unique<TankDrive>( m_chassis,  m_driverXbox );
+    m_gta = make_unique<GTADrive>( m_chassis,  m_driverXbox );
+    m_shooterControl = make_unique<ShooterControl>( m_shooter,  m_copilotXbox );
+    
 
 }
 
@@ -89,7 +108,9 @@ void Robot::AutonomousPeriodic()
 ///-----------------------------------------------------------------------
 void Robot::TeleopInit() 
 {
-    // Call TelopDrive's init method
+    m_arcade->Drive();
+    //m_gta->Drive();
+    //m_tank->Drive();
 }
 
 
@@ -100,7 +121,9 @@ void Robot::TeleopInit()
 ///-----------------------------------------------------------------------
 void Robot::TeleopPeriodic() 
 {
-    // Call TelopDrive's periodic method
+   m_arcade->Drive();
+    //m_gta->Drive();
+    //m_tank->Drive();
 }
 
 
