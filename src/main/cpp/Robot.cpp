@@ -111,6 +111,7 @@ void Robot::TeleopInit()
     m_arcade->Drive();
     //m_gta->Drive();
     //m_tank->Drive();
+    m_shooterControl->Run();
 }
 
 
@@ -124,6 +125,7 @@ void Robot::TeleopPeriodic()
    m_arcade->Drive();
     //m_gta->Drive();
     //m_tank->Drive();
+   m_shooterControl->Run();
 }
 
 

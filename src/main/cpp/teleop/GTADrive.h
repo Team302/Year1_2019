@@ -44,7 +44,7 @@ class GTADrive : public ThrottleSteerDrive
             std::shared_ptr<DragonXBox>  xbox
         );
         GTADrive() = delete;
-        ~GTADrive();
+        ~GTADrive() = default;
                
     protected:
         double GetSteer() override;
