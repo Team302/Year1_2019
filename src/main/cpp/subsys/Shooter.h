@@ -20,6 +20,7 @@
 #pragma once
 
 // Standard C++ includes
+#include <frc/DigitalInput.h>
 
 // Team 302 include
 
@@ -57,11 +58,14 @@ class Shooter
         ( 
             bool isLifting         // <I> - power to send to the right motors (between -1.0 and 1.0)
         );
+
+        bool HasBalls() const;
         
     private:
     
         ctre::phoenix::motorcontrol::can::TalonSRX*   m_shooterMotor;
         ctre::phoenix::motorcontrol::can::TalonSRX*   m_liftMotor;
+        frc::DigitalInput*                            m_ballSensor;
 
         const double m_liftSpeed = 1.0;
 

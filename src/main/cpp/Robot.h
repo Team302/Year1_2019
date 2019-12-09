@@ -28,14 +28,21 @@
 
 
 #include <frc/TimedRobot.h>
+#include <frc/SmartDashboard/SendableChooser.h>
 
-#include <teleop/ShooterControl.h>
+#include <auton/AutonDrive.h>
+#include <auton/AutonShoot.h>
+
 #include <controllers/DragonXBox.h>
-#include <subsys/Shooter.h>
+
 #include <teleop/ArcadeDrive.h>
 #include <teleop/TankDrive.h>
 #include <teleop/GTADrive.h>
+#include <teleop/TeleopDrive.h>
+#include <teleop/ShooterControl.h>
+
 #include <subsys/Chassis.h>
+#include <subsys/Shooter.h>
 
 class Robot : public frc::TimedRobot 
 {
@@ -58,4 +65,25 @@ class Robot : public frc::TimedRobot
        std::shared_ptr<ArcadeDrive>    m_arcade;
        std::shared_ptr<TankDrive>      m_tank;
        std::shared_ptr<GTADrive>       m_gta;
+       std::shared_ptr<TeleopDrive>    m_currentDrive;
+
+       std::unique_ptr<AutonDrive>     m_autonDrive;
+       std::unique_ptr<AutonShoot>     m_autonShoot;
+
+      frc::SendableChooser<std::string>   m_driveModeChooser;                    
+      const std::string                   m_driveModeArcade = "Arcade";      
+      const std::string                   m_driveModeGTA = "GTA";       
+      const std::string                   m_driveModeTank = "Tank";       
+      std::string                         m_driveModeSelected;       
+
+      enum AUTON_STATE
+      {
+        DRIVE_TO_SHOOT,
+        SHOOTING,
+        DRIVE_TO_GET,
+        STOP
+      };
+
+      AUTON_STATE m_currentState;
+
 };

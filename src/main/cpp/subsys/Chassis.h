@@ -53,12 +53,20 @@ class Chassis
             double leftPower,         // <I> - power to send to the left motors (between -1.0 and 1.0)
             double rightPower         // <I> - power to send to the right motors (between -1.0 and 1.0)
         );
+
+        double GetLeftDistance() const;
+        double GetRightDistance() const;
         
     private:
+        double ConvertCountsToInches
+        ( 
+            int counts
+        ) const;
     
-        ctre::phoenix::motorcontrol::can::TalonSRX*   m_frontRightMotor;
-        ctre::phoenix::motorcontrol::can::TalonSRX*   m_backRightMotor;
-        ctre::phoenix::motorcontrol::can::TalonSRX*   m_frontLeftMotor;
-        ctre::phoenix::motorcontrol::can::TalonSRX*   m_backLeftMotor;
+        ctre::phoenix::motorcontrol::can::TalonSRX*   m_rightMotor;
+        ctre::phoenix::motorcontrol::can::TalonSRX*   m_leftMotor;
+
+        const int m_countsPerRev = 4096;
+        const double m_wheelDiameter = 6.0;
 
 };

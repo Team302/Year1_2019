@@ -35,21 +35,32 @@
 #include <ctre/phoenix/MotorControl/CAN/TalonSRX.h>
 #include <ctre/phoenix/motorcontrol/ControlMode.h>
 
+using namespace frc;
+using namespace ctre::phoenix::motorcontrol;
 using namespace ctre::phoenix::motorcontrol::can;
 
 
 Shooter::Shooter()
 {
-    // This is assuming Thing 1
+    // CAN IDs
     auto shooterMotorID  = 4;
     auto liftMotorID  = 5;
+
+    // Digital Input IDs
+    auto ballSensorID = 1;
    
     
     m_liftMotor = new TalonSRX( liftMotorID );
     m_liftMotor->SetInverted( true );
+    m_liftMotor->SetNeutralMode( NeutralMode::Brake );
+
    
     m_shooterMotor = new TalonSRX( shooterMotorID );
     m_shooterMotor->SetInverted( true );
+    m_shooterMotor->SetNeutralMode( NeutralMode::Coast );
+
+    m_ballSensor = new DigitalInput( ballSensorID );
+
 }
 
 
@@ -73,7 +84,7 @@ void Shooter::Propel
     {
         speed = -1.0;
     }
-     m_shooterMotor->Set( ctre::phoenix::motorcontrol::ControlMode::PercentOutput, speed );
+     m_shooterMotor->Set( ControlMode::PercentOutput, speed );
 }
 
 void Shooter::Lift
@@ -81,7 +92,12 @@ void Shooter::Lift
     bool isLifting
 )
 {
-    double speed = ( isLifting ) ? m_liftSpeed : 0.0;
-    m_liftMotor->Set( ctre::phoenix::motorcontrol::ControlMode::PercentOutput, speed );
+    double speed = ( isLifting ) ? 1.0 : 0.0;
+    m_liftMotor->Set( ControlMode::PercentOutput, speed );
 
+}
+
+bool Shooter::HasBalls() const
+{
+    return m_ballSensor->Get();
 }
