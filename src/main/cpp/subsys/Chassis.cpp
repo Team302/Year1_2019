@@ -27,6 +27,7 @@
 #include <subsys/chassis.h>     // This class definition
 
 // Standard C++ includes
+#define _USE_MATH_DEFINES
 #include <cmath>                    // std::abs
 #include <iostream>                 // std::cout
 
@@ -36,25 +37,30 @@
 #include <ctre/phoenix/MotorControl/CAN/TalonSRX.h>
 #include <ctre/phoenix/motorcontrol/ControlMode.h>
 
+using namespace ctre::phoenix::motorcontrol;
 using namespace ctre::phoenix::motorcontrol::can;
 
 
 Chassis::Chassis()
 {
     // This is assuming Thing 1
-    auto leftMotor1  = 3;
-    auto leftMotor2  = 1;
-    auto rightMotor1 = 0;
-    auto rightMotor2 = 2;
+    auto leftMotor  = 3;
+    auto rightMotor = 2;
    
     
-    m_frontRightMotor = new TalonSRX( rightMotor1 );
-    m_backRightMotor = new TalonSRX( rightMotor2 );
+    m_rightMotor = new TalonSRX( rightMotor );
+    m_rightMotor->SetInverted( false );
+    m_rightMotor->SetNeutralMode( NeutralMode::Brake );
 
-    m_backLeftMotor = new TalonSRX( leftMotor1 );
-    m_backLeftMotor->SetInverted( true );
-    m_frontLeftMotor = new TalonSRX( leftMotor2 );
-    m_frontLeftMotor->SetInverted( true );
+    m_leftMotor = new TalonSRX( leftMotor );
+    m_leftMotor->SetInverted( true );
+    m_leftMotor->SetNeutralMode( NeutralMode::Brake );
+
+    m_rightMotor->ConfigSelectedFeedbackSensor( FeedbackDevice::QuadEncoder, 0, 0 );
+    m_rightMotor->SetSensorPhase( false );
+
+    m_leftMotor->ConfigSelectedFeedbackSensor( FeedbackDevice::QuadEncoder, 0, 0 );
+    m_rightMotor->SetSensorPhase( false );
    
 }
 
@@ -75,9 +81,28 @@ void Chassis::Drive
     auto right = std::abs( rightPower > 1.0 ) ? rightPower / std::abs( rightPower ) : rightPower;
 
     // Set the output to the motors
-    m_frontLeftMotor->Set( ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left );
-    m_backLeftMotor->Set( ctre::phoenix::motorcontrol::ControlMode::PercentOutput, left );
-    m_frontRightMotor->Set( ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right );
-    m_backRightMotor->Set( ctre::phoenix::motorcontrol::ControlMode::PercentOutput, right );
+    m_leftMotor->Set( ControlMode::PercentOutput, left );
+    m_rightMotor->Set( ControlMode::PercentOutput, right );
 
+}
+
+double Chassis::GetLeftDistance() const
+{
+    auto counts = m_leftMotor->GetSelectedSensorPosition( 0 );
+    return ConvertCountsToInches( counts );
+}
+
+double Chassis::GetRightDistance() const
+{
+    auto counts = m_rightMotor->GetSelectedSensorPosition( 0 );
+    return ConvertCountsToInches( counts );
+}
+
+double Chassis::ConvertCountsToInches
+(
+    int    counts
+) const
+{
+    double rev = static_cast<double>(counts) / static_cast<double>(m_countsPerRev);
+    return ( rev * M_PI * m_wheelDiameter );
 }

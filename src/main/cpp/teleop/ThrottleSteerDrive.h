@@ -20,6 +20,9 @@
 #include <memory>
 
 // Team 302 include
+#include <subsys/Chassis.h>
+#include <controllers/DragonXBox.h>
+#include <teleop/TeleopDrive.h>
 
 // CTRE includes 
 
@@ -32,7 +35,7 @@
  *                    throttle and a steer component
  *
  *========================================================================================================*/
-class ThrottleSteerDrive 
+class ThrottleSteerDrive : public TeleopDrive
 {
     public:
     
@@ -42,7 +45,7 @@ class ThrottleSteerDrive
             std::shared_ptr<DragonXBox>  xbox
         );
         ThrottleSteerDrive() = delete;
-        ~ThrottleSteerDrive();
+        ~ThrottleSteerDrive() = default;
                
     protected:
         void CalculateLeftRightPercents() override;

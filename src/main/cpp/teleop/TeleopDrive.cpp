@@ -40,7 +40,7 @@ TeleopDrive::TeleopDrive
 void TeleopDrive::Drive()
 {
     CalculateLeftRightPercents();
-    m_chassis->Drive( m_leftPower, m_rightPower );
+    m_chassis->Drive( m_leftPercent, m_rightPercent );
 }
 
 void TeleopDrive::SetLeftPercent( double percent )
@@ -51,5 +51,15 @@ void TeleopDrive::SetLeftPercent( double percent )
 void TeleopDrive::SetRightPercent( double percent )
 {
     m_rightPercent = percent;
+}
+
+shared_ptr<DragonXBox> TeleopDrive::GetXBox() const
+{
+    return m_xbox;
+}
+
+shared_ptr<Chassis> TeleopDrive::GetChassis() const
+{
+    return m_chassis;
 }
 

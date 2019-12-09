@@ -32,6 +32,8 @@ TankDrive::TankDrive
     shared_ptr<DragonXBox>  xbox
 ) : TeleopDrive( chassis, xbox )
 {
+    xbox->SetAxisProfile( IDragonGamePad::AXIS_IDENTIFIER::LEFT_JOYSTICK_Y, IDragonGamePad::AXIS_PROFILE::CUBED );
+    xbox->SetAxisProfile( IDragonGamePad::AXIS_IDENTIFIER::RIGHT_JOYSTICK_Y, IDragonGamePad::AXIS_PROFILE::CUBED );
 }
 
 void TankDrive::CalculateLeftRightPercents()
@@ -39,7 +41,7 @@ void TankDrive::CalculateLeftRightPercents()
     auto xbox = GetXBox();
     if ( xbox != nullptr )
     {
-        SetLeftPercent( xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::LEFT_JOYSTICK_Y );
-        SetRightPercent( xbox->GetAxisValue( IDragonGamePad::Axis_IDENTIFIER::RIGHT_JOYSTICK_Y );
+        SetLeftPercent( xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::LEFT_JOYSTICK_Y ) );
+        SetRightPercent( xbox->GetAxisValue( IDragonGamePad::AXIS_IDENTIFIER::RIGHT_JOYSTICK_Y ) );
     }
 }

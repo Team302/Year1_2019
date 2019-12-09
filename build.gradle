@@ -1,7 +1,7 @@
 plugins {
     id "cpp"
     id "google-test-test-suite"
-    id "edu.wpi.first.GradleRIO" version "2020.1.1-beta-2"
+    id "edu.wpi.first.GradleRIO" version "2020.1.1-beta-3a"
 }
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
@@ -54,21 +54,10 @@ model {
             sources.cpp {
                 source {
                     srcDir 'src/main/cpp'
-                    srcDir 'src/main/thirdparty'
-                    include "**/*.c"
-                    include "**/*.cc"
-                    include "**/*.cpp"
-                    include "**/*.cxx"
+                    include '**/*.cpp', '**/*.cc'
                 }
                 exportedHeaders {
                     srcDir 'src/main/include'
-                    srcDir 'src/main/thirdparty'
-                    if (includeSrcInIncludeRoot) {
-                        srcDir 'src/main/cpp'
-                    }
-                    include "**/*.h"
-                    include "**/*.hpp"
-                    include "**/*.hxx"
                     if (includeSrcInIncludeRoot) {
                         srcDir 'src/main/cpp'
                     }
