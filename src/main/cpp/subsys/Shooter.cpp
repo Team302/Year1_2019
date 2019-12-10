@@ -43,11 +43,11 @@ using namespace ctre::phoenix::motorcontrol::can;
 Shooter::Shooter()
 {
     // CAN IDs
-    auto shooterMotorID  = 4;
-    auto liftMotorID  = 5;
+    auto shooterMotorID  = 8;
+    auto liftMotorID  = 7;
 
     // Digital Input IDs
-    auto ballSensorID = 1;
+    auto ballSensorID = 3;
    
     
     m_liftMotor = new TalonSRX( liftMotorID );

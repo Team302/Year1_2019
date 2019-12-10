@@ -44,8 +44,8 @@ using namespace ctre::phoenix::motorcontrol::can;
 Chassis::Chassis()
 {
     // This is assuming Thing 1
-    auto leftMotor  = 3;
-    auto rightMotor = 2;
+    auto leftMotor  = 15;
+    auto rightMotor = 1;
    
     
     m_rightMotor = new TalonSRX( rightMotor );

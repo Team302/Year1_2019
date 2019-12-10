@@ -190,6 +190,7 @@ void Robot::TeleopInit()
 ///-----------------------------------------------------------------------
 void Robot::TeleopPeriodic() 
 {
+//    m_chassis->Drive( 1.0, 1.0 );
     m_currentDrive->Drive();
     m_shooterControl->Run();
 }
