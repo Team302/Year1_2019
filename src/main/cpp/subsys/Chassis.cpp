@@ -32,6 +32,7 @@
 #include <iostream>                 // std::cout
 
 // Team 302 include
+#include <RobotMap.h>
 
 // CTRE includes 
 #include <ctre/phoenix/MotorControl/CAN/TalonSRX.h>
@@ -42,17 +43,12 @@ using namespace ctre::phoenix::motorcontrol::can;
 
 
 Chassis::Chassis()
-{
-    // This is assuming Thing 1
-    auto leftMotor  = 15;
-    auto rightMotor = 1;
-   
-    
-    m_rightMotor = new TalonSRX( rightMotor );
+{   
+    m_rightMotor = new TalonSRX( RIGHT_DRIVE_MOTOR );
     m_rightMotor->SetInverted( false );
     m_rightMotor->SetNeutralMode( NeutralMode::Brake );
 
-    m_leftMotor = new TalonSRX( leftMotor );
+    m_leftMotor = new TalonSRX( LEFT_DRIVE_MOTOR );
     m_leftMotor->SetInverted( true );
     m_leftMotor->SetNeutralMode( NeutralMode::Brake );
 

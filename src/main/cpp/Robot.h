@@ -29,6 +29,7 @@
 
 #include <frc/TimedRobot.h>
 #include <frc/SmartDashboard/SendableChooser.h>
+#include <frc/Timer.h>
 
 #include <auton/AutonDrive.h>
 #include <auton/AutonShoot.h>
@@ -44,6 +45,8 @@
 #include <subsys/Chassis.h>
 #include <subsys/Shooter.h>
 
+#include <ctre/phoenix/MotorControl/CAN/TalonSRX.h>
+
 class Robot : public frc::TimedRobot 
 {
   public:
@@ -51,6 +54,8 @@ class Robot : public frc::TimedRobot
       void RobotPeriodic() override;
       void AutonomousInit() override;
       void AutonomousPeriodic() override;
+      void DisabledInit() override;
+      void DisabledPeriodic() override;
       void TeleopInit() override;
       void TeleopPeriodic() override;
       void TestInit() override;
@@ -70,11 +75,16 @@ class Robot : public frc::TimedRobot
        std::unique_ptr<AutonDrive>     m_autonDrive;
        std::unique_ptr<AutonShoot>     m_autonShoot;
 
+      std::unique_ptr<frc::Timer>      m_timer;
+
       frc::SendableChooser<std::string>   m_driveModeChooser;                    
       const std::string                   m_driveModeArcade = "Arcade";      
       const std::string                   m_driveModeGTA = "GTA";       
       const std::string                   m_driveModeTank = "Tank";       
       std::string                         m_driveModeSelected;       
+
+      ctre::phoenix::motorcontrol::can::TalonSRX*   m_rightMotor;
+
 
       enum AUTON_STATE
       {

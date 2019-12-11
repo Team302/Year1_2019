@@ -30,6 +30,7 @@
 #include <cmath>                    // std::abs
 
 // Team 302 include
+#include <RobotMap.h>
 
 // CTRE includes 
 #include <ctre/phoenix/MotorControl/CAN/TalonSRX.h>
@@ -42,25 +43,16 @@ using namespace ctre::phoenix::motorcontrol::can;
 
 Shooter::Shooter()
 {
-    // CAN IDs
-    auto shooterMotorID  = 8;
-    auto liftMotorID  = 7;
-
-    // Digital Input IDs
-    auto ballSensorID = 3;
-   
-    
-    m_liftMotor = new TalonSRX( liftMotorID );
+    m_liftMotor = new TalonSRX( LIFT_MOTOR );
     m_liftMotor->SetInverted( true );
     m_liftMotor->SetNeutralMode( NeutralMode::Brake );
 
    
-    m_shooterMotor = new TalonSRX( shooterMotorID );
-    m_shooterMotor->SetInverted( true );
+    m_shooterMotor = new TalonSRX( SHOOTER_MOTOR );
+    m_shooterMotor->SetInverted( false );
     m_shooterMotor->SetNeutralMode( NeutralMode::Coast );
 
-    m_ballSensor = new DigitalInput( ballSensorID );
-
+    m_ballSensor = new DigitalInput( BALL_SENSOR );
 }
 
 

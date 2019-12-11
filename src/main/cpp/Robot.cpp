@@ -30,9 +30,12 @@
 // FRC includes
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/Timer.h>
+#include <frc/PowerDistributionPanel.h>
 
 // Team 302 Includes
 #include <Robot.h>
+#include <RobotMap.h>
 
 #include <auton/AutonDrive.h>
 #include <auton/AutonShoot.h>
@@ -47,8 +50,11 @@
 #include <teleop/GTADrive.h>
 #include <teleop/ShooterControl.h>
 
+#include <ctre/phoenix/MotorControl/CAN/TalonSRX.h>
 
+using namespace frc;
 using namespace std;
+using namespace ctre::phoenix::motorcontrol::can;
 
 ///-----------------------------------------------------------------------
 /// Method:      RobotInit
@@ -57,7 +63,16 @@ using namespace std;
 ///-----------------------------------------------------------------------
 void Robot::RobotInit() 
 {
+   // auto dummyTalon = new TalonSRX( DUMMY_MOTOR );
+//    m_rightMotor = new TalonSRX( 1 );
+//    m_rightMotor->ConfigFactoryDefault();
+
     // Each of the objects created should be stored in a class attribute
+    
+    PowerDistributionPanel pdp;
+    pdp.ClearError();
+    pdp.ClearGlobalErrors();
+    pdp.ClearStickyFaults();
     
     // Create a Chassis object
     m_chassis = make_shared<Chassis>( );
@@ -84,6 +99,8 @@ void Robot::RobotInit()
     frc::SmartDashboard::PutData("Drive Mode", &m_driveModeChooser);
     
     m_currentState = AUTON_STATE::STOP;
+    
+    m_timer = make_unique<Timer>();
 
 }
 
@@ -96,6 +113,30 @@ void Robot::RobotInit()
 ///              methods and before the LiveWindow and SmartDashboard updating.
 ///-----------------------------------------------------------------------
 void Robot::RobotPeriodic() 
+{
+
+}
+///-----------------------------------------------------------------------
+/// Method:      RobotPeriodic
+/// Description: This function is called every robot packet, no matter the 
+///              mode. This is used for items like diagnostics that run 
+///              during disabled, autonomous, teleoperated and test modes
+///              (states).  THis runs after the specific state periodic 
+///              methods and before the LiveWindow and SmartDashboard updating.
+///-----------------------------------------------------------------------
+void Robot::DisabledInit() 
+{
+
+}
+///-----------------------------------------------------------------------
+/// Method:      RobotPeriodic
+/// Description: This function is called every robot packet, no matter the 
+///              mode. This is used for items like diagnostics that run 
+///              during disabled, autonomous, teleoperated and test modes
+///              (states).  THis runs after the specific state periodic 
+///              methods and before the LiveWindow and SmartDashboard updating.
+///-----------------------------------------------------------------------
+void Robot::DisabledPeriodic() 
 {
 
 }
@@ -178,6 +219,8 @@ void Robot::TeleopInit()
         m_currentDrive = m_arcade;
     }
     
+    m_timer->Start();
+
     m_currentDrive->Drive();
     m_shooterControl->Run();
 }
@@ -190,9 +233,14 @@ void Robot::TeleopInit()
 ///-----------------------------------------------------------------------
 void Robot::TeleopPeriodic() 
 {
+    PowerDistributionPanel pdp;
+    SmartDashboard::PutNumber("Current Channel 1", pdp.GetCurrent(1));
+
 //    m_chassis->Drive( 1.0, 1.0 );
     m_currentDrive->Drive();
-    m_shooterControl->Run();
+    m_shooter->Lift( true );
+    m_shooter->Propel( 0.7 );
+//    m_shooterControl->Run();
 }
 
 
@@ -202,7 +250,7 @@ void Robot::TeleopPeriodic()
 ///-----------------------------------------------------------------------
 void Robot::TestInit() 
 {
-
+    m_timer->Start();
 }
 
 
@@ -213,7 +261,15 @@ void Robot::TestInit()
 ///-----------------------------------------------------------------------
 void Robot::TestPeriodic() 
 {
+    cout << "time " << to_string( m_timer->Get() ) << endl;
+   // m_chassis->Drive( 1.0, 1.0 );
+    // m_shooter->Lift( true );
+    // m_shooter->Propel( 1.0 );
 
+    PowerDistributionPanel pdp;
+    SmartDashboard::PutNumber("Current Channel 1", pdp.GetCurrent(1));
+
+  //  m_rightMotor->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0.25 );
 }
 
 #ifndef RUNNING_FRC_TESTS
